@@ -5,9 +5,9 @@ function ProjectComponent({ project }) {
   return (
     <div className="p-5 bg-gray-800 border border-gray-700 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 dark:bg-gray-800 dark:border-gray-700">
       <Link to={`/project/${project?.id}`}>
-        {project?.fullImageUrl ? (
+        {project?.imageUrl ? (
           <img
-            src={project?.fullImageUrl}
+            src={project?.imageUrl}
             alt="Project Thumbnail"
             className="w-full h-48 object-cover rounded-lg mb-4"
           />

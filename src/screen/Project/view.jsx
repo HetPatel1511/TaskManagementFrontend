@@ -73,13 +73,12 @@ function Project({
         <div className="px-8 py-12">
           <div className="max-w-6xl mx-auto">
             {/* Project Title */}
-
             <div className="bg-gray-800 rounded-3xl shadow-md p-8 mb-8 dark:bg-gray-800 flex flex-col lg:flex-row items-start lg:items-center">
               {/* Image Section */}
               <div className="lg:w-1/3 w-full mb-4 lg:mb-0">
-                {projectData?.fullImageUrl ? (
+                {projectData?.imageUrl ? (
                   <img
-                    src={projectData?.fullImageUrl}
+                    src={projectData?.imageUrl}
                     alt={projectData?.name || "Project Image"}
                     className="w-full h-auto rounded-2xl shadow-lg object-cover"
                   />
