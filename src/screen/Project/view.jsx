@@ -22,6 +22,7 @@ function Project({
   useEffect(() => {
     fetchTaskDetailsWatcher({
       projectId: params.id,
+      limit: 4,
     });
 
     return () => {
@@ -62,6 +63,7 @@ function Project({
 
     fetchTaskDetailsWatcher({
       projectId: params.id,
+      limit: 4,
       ...data,
     });
   }, [searchParams]);
@@ -188,7 +190,7 @@ function Project({
                 {/* {taskData?.tasks && ( */}
                 <div className="space-y-6">
                   {/* Task List */}
-                  <TaskListComponent tasks={tasksData?.data} />
+                  <TaskListComponent tasks={tasksData} />
                 </div>
                 {/* )} */}
               </div>

@@ -14,6 +14,11 @@ function TaskListContainer({ tasks, filterByPriority, filterByDeadline, filterBy
     }
     setSearchParams(searchParams);
   };
+  
+  const handlePageChange = (page) => {
+    searchParams.set("page", page);
+    setSearchParams(searchParams);
+  };
 
   // Filtered tasks based on the criteria
   // const filteredTasks = tasks.filter((task) => {
@@ -45,7 +50,7 @@ function TaskListContainer({ tasks, filterByPriority, filterByDeadline, filterBy
             type="text"
             name="title"
             placeholder="Search by Task Title"
-            value={searchParams?.get("title")?searchParams?.get("title"):""}
+            value={searchParams?.get("title") ? searchParams?.get("title") : ""}
             onChange={handleFilterChange}
             className="px-4 py-2 rounded-md bg-gray-700 text-white border border-gray-600 w-full"
           />
@@ -61,7 +66,11 @@ function TaskListContainer({ tasks, filterByPriority, filterByDeadline, filterBy
             type="text"
             name="assignedTo"
             placeholder="Search by Assigned User"
-            value={searchParams?.get("assignedTo")?searchParams?.get("assignedTo"):""}
+            value={
+              searchParams?.get("assignedTo")
+                ? searchParams?.get("assignedTo")
+                : ""
+            }
             onChange={handleFilterChange}
             className="px-4 py-2 rounded-md bg-gray-700 text-white border border-gray-600 w-full"
           />
@@ -75,14 +84,18 @@ function TaskListContainer({ tasks, filterByPriority, filterByDeadline, filterBy
           <select
             id="priority"
             name="priority"
-            value={searchParams?.get("priority")?searchParams?.get("priority"):""}
+            value={
+              searchParams?.get("priority") ? searchParams?.get("priority") : ""
+            }
             onChange={handleFilterChange}
             className="px-4 py-2 rounded-md bg-gray-700 text-white border border-gray-600 w-full"
           >
             <option value="">Select Priority</option>
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
+            {tasks?.priorityValues?.map((priority) => (
+              <option value={priority}>
+                {priority.charAt(0).toUpperCase() + priority.slice(1)}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -94,7 +107,11 @@ function TaskListContainer({ tasks, filterByPriority, filterByDeadline, filterBy
           <select
             id="isCompleted"
             name="isCompleted"
-            value={searchParams?.get("isCompleted")?searchParams?.get("isCompleted"):""}
+            value={
+              searchParams?.get("isCompleted")
+                ? searchParams?.get("isCompleted")
+                : ""
+            }
             onChange={handleFilterChange}
             className="px-4 py-2 rounded-md bg-gray-700 text-white border border-gray-600 w-full"
           >
@@ -113,7 +130,11 @@ function TaskListContainer({ tasks, filterByPriority, filterByDeadline, filterBy
             id="deadlineGt"
             type="date"
             name="deadlineGt"
-            value={searchParams?.get("deadlineGt")?searchParams?.get("deadlineGt"):""}
+            value={
+              searchParams?.get("deadlineGt")
+                ? searchParams?.get("deadlineGt")
+                : ""
+            }
             onChange={handleFilterChange}
             className="px-4 py-2 rounded-md bg-gray-700 text-white border border-gray-600 w-full"
           />
@@ -128,7 +149,11 @@ function TaskListContainer({ tasks, filterByPriority, filterByDeadline, filterBy
             id="deadlineLt"
             type="date"
             name="deadlineLt"
-            value={searchParams?.get("deadlineLt")?searchParams?.get("deadlineLt"):""}
+            value={
+              searchParams?.get("deadlineLt")
+                ? searchParams?.get("deadlineLt")
+                : ""
+            }
             onChange={handleFilterChange}
             className="px-4 py-2 rounded-md bg-gray-700 text-white border border-gray-600 w-full"
           />
@@ -137,14 +162,55 @@ function TaskListContainer({ tasks, filterByPriority, filterByDeadline, filterBy
 
       {/* Task List */}
       <div className="space-y-6">
-        {tasks?.length > 0 ? (
-          tasks?.map((task) => <TaskComponent key={task.id} task={task} />)
+        {tasks?.data?.length > 0 ? (
+          tasks?.data?.map((task) => (
+            <TaskComponent key={task.id} task={task} />
+          ))
         ) : (
           <p className="text-center text-gray-400">
             No tasks match your filters.
           </p>
         )}
       </div>
+      {tasks?.metadata && tasks?.metadata?.pageCount > 1 && (
+        <div className="flex items-center justify-center mt-6 space-x-2">
+          {/* Previous Button */}
+          <button
+            className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!tasks?.metadata?.hasPreviousPage}
+            onClick={() => handlePageChange(tasks?.metadata?.page - 1)}
+          >
+            Previous
+          </button>
+
+          {/* Page Numbers */}
+          {Array.from(
+            { length: tasks?.metadata?.pageCount }, // Replace with the total number of pages
+            (_, index) => index + 1
+          ).map((page) => (
+            <button
+              key={page}
+              className={`px-3 py-2 rounded-md ${
+                tasks?.metadata?.page === page
+                  ? "bg-primary-600 text-white"
+                  : "bg-gray-700 text-gray-300"
+              } hover:bg-gray-600`}
+              onClick={() => handlePageChange(page)}
+            >
+              {page}
+            </button>
+          ))}
+
+          {/* Next Button */}
+          <button
+            className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!tasks?.metadata?.hasNextPage}
+            onClick={() => handlePageChange(tasks?.metadata?.page + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

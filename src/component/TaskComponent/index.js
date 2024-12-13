@@ -10,7 +10,7 @@ function TaskComponent({ task }) {
     isCompleted,
     priority,
     deadline,
-    createdDate,
+    createdAt,
   } = task;
 
   return (
@@ -41,7 +41,7 @@ function TaskComponent({ task }) {
           </div>
         </div>
         <div className="text-xs text-gray-400">
-          Created: {new Date(createdDate).toLocaleDateString()}
+          Created: {createdAt ? new Date(createdAt).toLocaleDateString() : "N/A"}
         </div>
       </div>
 
@@ -61,7 +61,7 @@ function TaskComponent({ task }) {
       {/* Footer Section */}
       <div className="flex justify-between items-center">
         <div className="text-xs text-gray-400">
-          Deadline: {new Date(deadline).toLocaleDateString()}
+          Deadline: {deadline ? new Date(deadline).toLocaleDateString() : "N/A"}
         </div>
         <div className="text-sm text-gray-400">
           Assigned to:{" "}
